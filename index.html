@@ -2,95 +2,72 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão Jordana | Oficial</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Jordana | Gestão</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-        .card-shadow { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fdfaf5; -webkit-tap-highlight-color: transparent; }
+        .card-nude { background-color: #ffffff; border: 1px solid #f3ece4; }
+        .btn-nude { background-color: #8d7763; color: white; }
+        /* Ajuste para celular: esconde colunas menos importantes em telas pequenas */
+        @media (max-width: 640px) {
+            .hide-mobile { display: none; }
+        }
     </style>
 </head>
-<body class="p-4 md:p-8">
-
-    <div class="max-w-6xl mx-auto">
-        <header class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-            <div>
-                <h1 class="text-3xl font-extrabold text-slate-800 tracking-tight">Fluxo de Caixa</h1>
-                <p class="text-slate-500 font-medium">Controle de Faturamento Detalhado</p>
-            </div>
-            
-            <div class="flex flex-wrap justify-center gap-3">
-                <button onclick="abrirConfig('servicos')" class="bg-white border border-slate-200 text-slate-600 font-bold py-2 px-4 rounded-xl text-xs hover:bg-slate-50">Config. Serviços</button>
-                <button onclick="abrirConfig('pagamentos')" class="bg-white border border-slate-200 text-slate-600 font-bold py-2 px-4 rounded-xl text-xs hover:bg-slate-50">Config. Pagamentos</button>
-                <input type="month" id="filtroMes" onchange="atualizarInterface()" class="bg-white p-2 rounded-xl border border-slate-200 font-bold text-indigo-600 outline-none">
-                <button onclick="abrirModalRegistro()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-2xl shadow-lg transition-all">+ Novo Registro</button>
-            </div>
+<body class="p-4 pb-24 text-stone-800"> <div class="max-w-md mx-auto">
+        <header class="mb-8 text-center pt-4">
+            <h1 class="text-3xl font-extrabold italic text-stone-800">Studio <span class="text-[#b4a08c]">Jordana</span></h1>
+            <p class="text-[10px] font-black text-stone-400 uppercase tracking-[0.2em] mt-1">Gestão de Faturamento</p>
         </header>
 
-        <div id="containerCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-            </div>
+        <div class="mb-6 flex justify-center">
+            <input type="month" id="filtroMes" onchange="atualizarInterface()" class="bg-[#f3ece4] px-6 py-3 rounded-2xl font-bold text-[#8d7763] outline-none border-none text-sm w-full shadow-sm">
+        </div>
 
-        <div class="bg-white rounded-3xl card-shadow border border-slate-100 overflow-hidden">
-            <div class="p-6 border-b border-slate-50 flex justify-between items-center">
-                <h3 class="font-bold text-slate-800 uppercase text-xs tracking-widest">Histórico de Lançamentos</h3>
-                <span id="resumoGeral" class="text-xs font-black text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full"></span>
+        <div id="containerCards" class="grid grid-cols-2 gap-3 mb-8"></div>
+
+        <div class="bg-white rounded-[2rem] shadow-sm border border-[#f3ece4] overflow-hidden">
+            <div class="p-5 border-b border-[#fdfaf5] flex justify-between items-center bg-white">
+                <h3 class="font-bold text-stone-700 text-sm italic">Atendimentos</h3>
+                <span id="resumoGeral" class="text-[9px] font-black text-[#8d7763] bg-[#f3ece4] px-3 py-1.5 rounded-xl uppercase"></span>
             </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm">
-                    <thead class="bg-slate-50 text-slate-400 text-[10px] font-black uppercase">
-                        <tr>
-                            <th class="px-6 py-4">Data</th>
-                            <th class="px-6 py-4">Cliente</th>
-                            <th class="px-6 py-4">Serviço / Pagamento</th>
-                            <th class="px-6 py-4 text-right">Valor</th>
-                            <th class="px-6 py-4 text-center">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabelaCorpo" class="divide-y divide-slate-50 text-slate-700"></tbody>
-                </table>
-            </div>
+            <div class="divide-y divide-[#fdfaf5]" id="tabelaCorpo">
+                </div>
+        </div>
+
+        <div class="fixed bottom-6 left-0 right-0 px-6 z-40">
+            <button onclick="abrirModalRegistro()" class="w-full bg-[#8d7763] text-white font-bold py-5 rounded-[2rem] shadow-2xl flex justify-center items-center gap-2 transform active:scale-95 transition-transform">
+                <span class="text-xl">+</span> NOVO REGISTRO
+            </button>
         </div>
     </div>
 
-    <div id="modalRegistro" style="display:none;" class="fixed inset-0 bg-slate-900/60 flex items-center justify-center z-50 p-4">
-        <div class="bg-white w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl">
-            <h2 id="modalTitulo" class="text-2xl font-black text-slate-800 mb-6">Lançamento</h2>
+    <div id="modalRegistro" style="display:none;" class="fixed inset-0 bg-stone-900/40 backdrop-blur-sm flex items-end sm:items-center justify-center z-50">
+        <div class="bg-white w-full max-w-sm rounded-t-[3rem] sm:rounded-[2.5rem] p-8 shadow-2xl border-t border-[#f3ece4] animate-slide-up">
+            <h2 id="modalTitulo" class="text-xl font-extrabold text-stone-800 mb-6 text-center italic">Lançamento</h2>
             <form id="formRegistro" class="space-y-4">
                 <input type="hidden" id="editId">
-                <div class="grid grid-cols-2 gap-4">
-                    <input type="date" id="fData" required class="p-4 bg-slate-50 border border-slate-100 rounded-2xl w-full text-sm outline-none">
-                    <input type="number" id="fValor" step="0.01" placeholder="Valor R$" required class="p-4 bg-slate-50 border border-slate-100 rounded-2xl w-full text-sm outline-none">
+                <div class="grid grid-cols-2 gap-3">
+                    <input type="date" id="fData" required class="p-4 bg-[#fdfaf5] rounded-2xl border-none outline-none text-xs font-bold text-stone-600 w-full">
+                    <input type="number" id="fValor" step="0.01" placeholder="R$" required class="p-4 bg-[#fdfaf5] rounded-2xl border-none outline-none text-xs font-bold text-stone-600 w-full">
                 </div>
-                <input type="text" id="fCliente" placeholder="Nome da Cliente" required class="p-4 bg-slate-50 border border-slate-100 rounded-2xl w-full text-sm outline-none">
-                <select id="selServico" class="p-4 bg-slate-50 border border-slate-100 rounded-2xl w-full text-sm outline-none"></select>
-                <select id="selPagamento" class="p-4 bg-slate-50 border border-slate-100 rounded-2xl w-full text-sm outline-none"></select>
-                <div class="flex gap-4 pt-4">
-                    <button type="button" onclick="fecharModal('modalRegistro')" class="flex-1 font-bold text-slate-400">Voltar</button>
-                    <button type="submit" class="flex-2 bg-indigo-600 text-white px-8 py-4 rounded-2xl font-bold">Gravar</button>
+                <input type="text" id="fCliente" placeholder="Nome da Cliente" required class="w-full p-4 bg-[#fdfaf5] rounded-2xl border-none outline-none text-xs font-bold text-stone-600">
+                <select id="selServico" class="w-full p-4 bg-[#fdfaf5] rounded-2xl border-none outline-none text-xs font-bold text-stone-600"></select>
+                <select id="selPagamento" class="w-full p-4 bg-[#fdfaf5] rounded-2xl border-none outline-none text-xs font-bold text-stone-600"></select>
+                <div class="grid grid-cols-2 gap-3 pt-2">
+                    <button type="button" onclick="fecharModal('modalRegistro')" class="py-4 text-stone-400 font-bold text-xs uppercase">Cancelar</button>
+                    <button type="submit" class="bg-[#8d7763] text-white py-4 rounded-2xl font-bold text-xs">GRAVAR</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <div id="modalConfig" style="display:none;" class="fixed inset-0 bg-slate-900/60 flex items-center justify-center z-[60] p-4">
-        <div class="bg-white w-full max-w-sm rounded-[2.5rem] p-8 shadow-2xl">
-            <h2 id="configTitulo" class="text-xl font-black text-slate-800 mb-4 uppercase">Configuração</h2>
-            <div class="flex gap-2 mb-6">
-                <input type="text" id="novoItemInput" placeholder="Nome..." class="flex-1 p-3 bg-slate-50 border border-slate-100 rounded-xl text-sm outline-none">
-                <button onclick="adicionarConfigItem()" class="bg-indigo-600 text-white px-4 py-2 rounded-xl font-bold">+</button>
-            </div>
-            <ul id="listaConfigItems" class="space-y-2 mb-6 max-h-48 overflow-y-auto pr-1"></ul>
-            <button onclick="fecharModal('modalConfig')" class="w-full py-3 bg-slate-100 rounded-xl font-bold text-slate-500 hover:bg-slate-200 transition-all">Fechar</button>
-        </div>
-    </div>
-
     <script>
-        // Banco e Configurações iniciais
-        let banco = JSON.parse(localStorage.getItem('db_jordana_vFinal')) || [];
-        let servicos = JSON.parse(localStorage.getItem('conf_serv_vFinal')) || ['Aplicação', 'Manutenção', 'Conserto', 'Remoção'];
-        let pagamentos = JSON.parse(localStorage.getItem('conf_pago_vFinal')) || ['Dinheiro', 'Pix', 'Cartão Ton'];
-        let configTipoAtual = '';
+        let banco = JSON.parse(localStorage.getItem('db_jordana_mobile')) || [];
+        let servicos = JSON.parse(localStorage.getItem('conf_serv_mobile')) || ['Aplicação', 'Manutenção', 'Conserto', 'Remoção'];
+        let pagamentos = JSON.parse(localStorage.getItem('conf_pago_mobile')) || ['Dinheiro', 'Pix', 'Cartão Ton'];
 
         window.onload = () => {
             const hoje = new Date();
@@ -98,15 +75,15 @@
             atualizarInterface();
         };
 
-        // --- MODAIS ---
         function abrirModalRegistro(id = null) {
             const form = document.getElementById('formRegistro');
             form.reset();
             document.getElementById('editId').value = "";
             document.getElementById('modalTitulo').innerText = "Novo Registro";
             document.getElementById('fData').value = new Date().toISOString().substring(0, 10);
-            
-            popularSelects();
+            document.getElementById('selServico').innerHTML = servicos.map(s => `<option value="${s}">${s}</option>`).join('');
+            document.getElementById('selPagamento').innerHTML = pagamentos.map(p => `<option value="${p}">${p}</option>`).join('');
+
             if(id) {
                 const item = banco.find(i => i.id === id);
                 document.getElementById('editId').value = item.id;
@@ -115,63 +92,13 @@
                 document.getElementById('fValor').value = item.valor;
                 document.getElementById('selServico').value = item.servico;
                 document.getElementById('selPagamento').value = item.pagamento;
-                document.getElementById('modalTitulo').innerText = "Editar Registro";
+                document.getElementById('modalTitulo').innerText = "Editar";
             }
             document.getElementById('modalRegistro').style.display = 'flex';
         }
 
-        function abrirConfig(tipo) {
-            configTipoAtual = tipo;
-            document.getElementById('configTitulo').innerText = tipo === 'servicos' ? 'Serviços' : 'Pagamentos';
-            renderizarListaConfig();
-            document.getElementById('modalConfig').style.display = 'flex';
-        }
-
         function fecharModal(id) { document.getElementById(id).style.display = 'none'; }
 
-        // --- LÓGICA DE CONFIGURAÇÃO (SERVIÇOS E PAGAMENTOS) ---
-        function renderizarListaConfig() {
-            const lista = document.getElementById('listaConfigItems');
-            const dados = configTipoAtual === 'servicos' ? servicos : pagamentos;
-            lista.innerHTML = dados.map((item, idx) => `
-                <li class="flex justify-between items-center bg-slate-50 p-3 rounded-xl">
-                    <span class="text-xs font-bold text-slate-600 uppercase">${item}</span>
-                    <button onclick="removerConfigItem(${idx})" class="text-red-300 hover:text-red-500 text-lg leading-none">✖</button>
-                </li>
-            `).join('');
-        }
-
-        function adicionarConfigItem() {
-            const input = document.getElementById('novoItemInput');
-            const val = input.value.trim();
-            if(!val) return;
-            if(configTipoAtual === 'servicos') servicos.push(val);
-            else pagamentos.push(val);
-            salvarConfigs();
-            input.value = '';
-            renderizarListaConfig();
-            atualizarInterface();
-        }
-
-        function removerConfigItem(idx) {
-            if(configTipoAtual === 'servicos') servicos.splice(idx, 1);
-            else pagamentos.splice(idx, 1);
-            salvarConfigs();
-            renderizarListaConfig();
-            atualizarInterface();
-        }
-
-        function salvarConfigs() {
-            localStorage.setItem('conf_serv_vFinal', JSON.stringify(servicos));
-            localStorage.setItem('conf_pago_vFinal', JSON.stringify(pagamentos));
-        }
-
-        function popularSelects() {
-            document.getElementById('selServico').innerHTML = servicos.map(s => `<option value="${s}">${s}</option>`).join('');
-            document.getElementById('selPagamento').innerHTML = pagamentos.map(p => `<option value="${p}">${p}</option>`).join('');
-        }
-
-        // --- LÓGICA DE LANÇAMENTOS ---
         document.getElementById('formRegistro').onsubmit = (e) => {
             e.preventDefault();
             const editId = document.getElementById('editId').value;
@@ -191,68 +118,66 @@
                 banco.push(item);
             }
 
-            localStorage.setItem('db_jordana_vFinal', JSON.stringify(banco));
+            localStorage.setItem('db_jordana_mobile', JSON.stringify(banco));
             fecharModal('modalRegistro');
             atualizarInterface();
         };
 
         function removerRegistro(id) {
-            if(confirm("Deseja apagar este registro?")) {
+            if(confirm("Excluir definitivamente?")) {
                 banco = banco.filter(i => i.id !== id);
-                localStorage.setItem('db_jordana_vFinal', JSON.stringify(banco));
+                localStorage.setItem('db_jordana_mobile', JSON.stringify(banco));
                 atualizarInterface();
             }
         }
 
-        // --- ATUALIZAÇÃO DA TELA E CARDS ---
         function atualizarInterface() {
             const mesSel = document.getElementById('filtroMes').value;
             const filtrados = banco.filter(i => i.data.substring(0, 7) === mesSel);
 
-            // TABELA
+            // LISTA OTIMIZADA PARA CELULAR (CARD STYLE)
             const corpo = document.getElementById('tabelaCorpo');
-            corpo.innerHTML = filtrados.sort((a,b) => new Date(b.data) - new Date(a.data)).map(i => `
-                <tr class="hover:bg-slate-50 transition-colors">
-                    <td class="px-6 py-4 text-[10px] font-bold text-slate-400">${i.data.split('-').reverse().join('/')}</td>
-                    <td class="px-6 py-4 font-bold text-slate-700 uppercase text-[12px] tracking-tighter">${i.cliente}</td>
-                    <td class="px-6 py-4">
-                        <div class="text-indigo-600 font-black text-[10px] uppercase">${i.servico}</div>
-                        <div class="text-slate-400 font-bold text-[9px] uppercase tracking-widest">${i.pagamento}</div>
-                    </td>
-                    <td class="px-6 py-4 text-right font-black italic text-slate-800">R$ ${i.valor.toFixed(2).replace('.',',')}</td>
-                    <td class="px-6 py-4 text-center space-x-3">
-                        <button onclick="abrirModalRegistro(${i.id})" class="text-blue-400 text-lg">✎</button>
-                        <button onclick="removerRegistro(${i.id})" class="text-red-200 text-lg">✖</button>
-                    </td>
-                </tr>
-            `).join('') || '<tr><td colspan="5" class="p-10 text-center text-slate-300 italic">Sem lançamentos.</td></tr>';
+            if(filtrados.length === 0) {
+                corpo.innerHTML = '<div class="p-10 text-center text-stone-300 italic text-xs uppercase">Sem registros.</div>';
+            } else {
+                corpo.innerHTML = filtrados.sort((a,b) => new Date(b.data) - new Date(a.data)).map(i => `
+                    <div class="p-5 flex justify-between items-center active:bg-[#fdfaf5]">
+                        <div onclick="abrirModalRegistro(${i.id})">
+                            <p class="text-[10px] font-bold text-stone-300">${i.data.split('-').reverse().join('/')}</p>
+                            <p class="font-bold text-stone-700 text-sm tracking-tight capitalize">${i.cliente}</p>
+                            <div class="mt-1 flex gap-1">
+                                <span class="text-[#8d7763] font-extrabold text-[8px] uppercase bg-[#f3ece4] px-1.5 py-0.5 rounded-md">${i.servico}</span>
+                                <span class="text-stone-300 font-bold text-[8px] uppercase px-1 py-0.5 border border-[#f3ece4] rounded-md">${i.pagamento}</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <p class="font-black italic text-stone-800 text-sm">R$ ${i.valor.toFixed(2).replace('.',',')}</p>
+                            <button onclick="removerRegistro(${i.id})" class="text-stone-200 p-2 font-bold">✕</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
 
-            // CARDS AUTOMÁTICOS
+            // CARDS
             const container = document.getElementById('containerCards');
-            let htmlCards = '';
             let totalGeralMes = 0;
+            let htmlCards = '';
 
             pagamentos.forEach(metodo => {
                 const totalMetodo = filtrados.filter(i => i.pagamento === metodo).reduce((a, b) => a + b.valor, 0);
                 totalGeralMes += totalMetodo;
-                
-                const ehDinheiro = metodo.toLowerCase() === 'dinheiro';
-                const corBorda = ehDinheiro ? 'border-emerald-500' : 'border-indigo-500';
-                const corTexto = ehDinheiro ? 'text-emerald-600' : 'text-indigo-600';
-
                 htmlCards += `
-                    <div class="bg-white p-5 rounded-3xl border-b-4 ${corBorda} card-shadow text-center">
-                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">${metodo}</p>
-                        <h2 class="text-2xl font-black ${corTexto} italic">R$ ${totalMetodo.toLocaleString('pt-BR', {minimumFractionDigits:2})}</h2>
+                    <div class="card-nude p-4 rounded-2xl">
+                        <p class="text-[7px] font-black text-stone-300 uppercase tracking-widest mb-1">${metodo}</p>
+                        <h2 class="text-sm font-black text-[#8d7763] italic">R$ ${totalMetodo.toLocaleString('pt-BR', {minimumFractionDigits:2})}</h2>
                     </div>
                 `;
             });
 
-            // Card do Total Geral
             htmlCards = `
-                <div class="bg-white p-5 rounded-3xl border-b-4 border-slate-800 card-shadow text-center">
-                    <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">FATURAMENTO MÊS</p>
-                    <h2 class="text-2xl font-black text-slate-800 italic">R$ ${totalGeralMes.toLocaleString('pt-BR', {minimumFractionDigits:2})}</h2>
+                <div class="card-nude p-4 rounded-2xl col-span-2 shadow-sm border-stone-200">
+                    <p class="text-[7px] font-black text-stone-400 uppercase tracking-widest mb-1 italic">Total Faturado no Mês</p>
+                    <h2 class="text-xl font-black text-stone-800 tracking-tighter italic">R$ ${totalGeralMes.toLocaleString('pt-BR', {minimumFractionDigits:2})}</h2>
                 </div>
             ` + htmlCards;
 
